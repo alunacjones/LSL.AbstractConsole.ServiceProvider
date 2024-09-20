@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace LSL.AbstractConsole.ServiceProvider
 {
@@ -19,7 +20,7 @@ namespace LSL.AbstractConsole.ServiceProvider
             configurer ??= (o => {});
             
             return source
-                .AddSingleton<IConsole, DefaultConsole>()
+                .AddSingleton<IConsole>(sp => new DefaultConsole(sp.GetRequiredService<IOptions<ConsoleOptions>>().Value.TextWriter))
                 .Configure(configurer);
         }
     }
